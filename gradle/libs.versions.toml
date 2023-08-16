@@ -1,0 +1,45 @@
+[versions]
+agp = "8.2.0-alpha16"
+junit = "4.13.2"
+androidx-test-ext-junit = "1.1.5"
+espresso-core = "3.5.1"
+appcompat = "1.6.1"
+material = "1.9.0"
+constraintlayout = "2.1.4"
+firebase-database = "20.2.2"
+firebase-database-bom = "32.2.2"
+firebase-storage = "20.2.1"
+firebase-messaging = "23.2.1"
+firebase-firestore = "24.7.0"
+firebase-inappmessaging-display = "20.3.3"
+fadingedgelayout = "1.0.0"
+swiperefreshlayout = "1.2.0-alpha01"
+overscroll = "1.1.1"
+okhttp = "5.0.0-alpha.11"
+gson = "2.10.1"
+prdownloader = "0.6.0"
+
+[libraries]
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database"}
+firebase-database-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-database-bom"}
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebase-storage"}
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging"}
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebase-firestore"}
+firebase-inappmessaging-display = { group = "com.google.firebase", name = "firebase-inappmessaging-display", version.ref = "firebase-inappmessaging-display"}
+fadingedgelayout = { group = "com.github.bosphere.android-fadingedgelayout", name = "fadingedgelayout", version.ref = "fadingedgelayout"}
+swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout"}
+overscroll = { group = "io.github.everythingme", name = "overscroll-decor-android", version.ref = "overscroll"}
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp"}
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson"}
+prdownloader = { group = "com.mindorks.android", name = "prdownloader", version.ref = "prdownloader"}
+# = { group = "", name = "", version.ref = ""}
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+

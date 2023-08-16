@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "330310722251",
+    "firebase_url": "https://mod-apk-io-default-rtdb.firebaseio.com",
+    "project_id": "mod-apk-io",
+    "storage_bucket": "mod-apk-io.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330310722251:android:26bc4f817b41831a39f14e",
+        "android_client_info": {
+          "package_name": "com.apk.mod.io"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330310722251-72c0dj95e0ip418p4v9llsbomkdf00lo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCmRt8WYiwxT5T14PcMMXkR8Cz4v6eqfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330310722251-72c0dj95e0ip418p4v9llsbomkdf00lo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
