@@ -31,7 +31,7 @@ public class PermissionActivity extends AppCompatActivity {
         String permissionMessage = getString(R.string.permission_message);
         String combinedText = String.format("%s %s", appName, permissionMessage);
         permission_text.setText(combinedText);
-        SystemUI.setCornerRadius(this, button2, ColorStateList.valueOf(Color.TRANSPARENT), 0, ColorStateList.valueOf(0xFF2A2B2F));
+        SystemUI.setCornerRadius(this, button2, ColorStateList.valueOf(Color.TRANSPARENT), 0, ColorStateList.valueOf(0xFF2A2B2F), 3, 0, false);
         button1.setOnClickListener(view -> {
             String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
             if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED

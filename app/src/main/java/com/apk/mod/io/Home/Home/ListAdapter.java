@@ -130,8 +130,10 @@ public class ListAdapter extends BaseAdapter {
         linear2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String link = data.get((int) position).get("link").toString().replace("blob", "raw").trim();
+                String filename = data.get((int) position).get("name").toString().concat(" ".concat(data.get((int) position).get("version").toString().concat(".apk")));
                 DownloaderHandler downloaderHandler = new DownloaderHandler();
-                downloaderHandler.showDownloader(context, layoutInflater);
+                downloaderHandler.showDownloader(context, layoutInflater, link, filename);
             }
         });
         return view;

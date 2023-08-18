@@ -158,17 +158,16 @@ public class HomeActivity extends AppCompatActivity {
                 setData(getString(R.string.data1));
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View convertView, int position, long id) {
-                DownloaderHandler downloaderHandler = new DownloaderHandler();
-                downloaderHandler.showDownloader(HomeActivity.this, getLayoutInflater());
-
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View convertView, int position, long id) {
+//                DownloaderHandler downloaderHandler = new DownloaderHandler();
+//                downloaderHandler.showDownloader(HomeActivity.this, getLayoutInflater());
+//            }
+//        });
     }
     private void initialize() {
-        SystemUI.setCornerRadius(this, search, ColorStateList.valueOf(0xFF202226),5, ColorStateList.valueOf(0xFF2A2B2F));
+        SystemUI.setCornerRadius(this, search, ColorStateList.valueOf(0xFF202226), 5, ColorStateList.valueOf(0xFF2A2B2F), 3, 0, false);
         listView.setHorizontalScrollBarEnabled(false);
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
