@@ -33,7 +33,7 @@
     <string name="delete">Delete</string>
     <string name="open">Open</string>
     <string name="grant_access">Grant Access</string>
-    <string name="permission_message">DataVault needs access to your Storage. This permission is used to Share and store documents, media, and files on your device. (Required)</string>
+    <string name="permission_message"> needs access to your Storage. This permission is used to Share and store documents, media, and files on your device. (Required)</string>
     <string name="next">CONTINUE</string>
     <string name="quit">QUIT</string>
 </resources>

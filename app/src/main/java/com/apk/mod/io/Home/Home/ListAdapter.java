@@ -3,7 +3,6 @@ package com.apk.mod.io.Home.Home;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.apk.mod.io.R;
@@ -25,10 +25,12 @@ import java.util.Objects;
 public class ListAdapter extends BaseAdapter {
     private ArrayList<HashMap<String, Object>> data;
     private Context context;
+    private LayoutInflater layoutInflater;
 
-    public ListAdapter(Context context, ArrayList<HashMap<String, Object>> arr) {
+    public ListAdapter(Context context, LayoutInflater layoutInflater, ArrayList<HashMap<String, Object>> arr) {
         this.context = context;
         this.data = arr;
+        this.layoutInflater = layoutInflater;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class ListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = convertView;
         if (view == null) {
@@ -93,18 +96,20 @@ public class ListAdapter extends BaseAdapter {
         } else {
             end_of_list.setVisibility(View.GONE);
         }
-        SystemUI.gradientDrawable(linear1, 0, 0, 0, "#FF202226", "#000000", false);
-        SystemUI.gradientDrawable(linear2, 0, 2, 20, "#FF202226", "#FF2A2B2F", false);
-        SystemUI.setCornerRadius(context, type_holder1, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF9E9E9E));
-        SystemUI.setCornerRadius(context, type_holder2, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF2196F3));
-        SystemUI.setCornerRadius(context, type_holder3, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFFF44336));
-        SystemUI.setCornerRadius(context, type_holder4, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF228B22));
+        SystemUI.setCornerRadius(context, linear1, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF000000), 0, 0, false);
+        SystemUI.setCornerRadius(context, linear2, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF2A2B2F), 2, 20, false);
+//        SystemUI.gradientDrawable(linear1, 0, 0, 0, "#FF202226", "#000000", false);
+//        SystemUI.gradientDrawable(linear2, 0, 2, 20, "#FF202226", "#FF2A2B2F", false);
+//        SystemUI.setCornerRadius(context, type_holder1, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF9E9E9E));
+//        SystemUI.setCornerRadius(context, type_holder2, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF2196F3));
+//        SystemUI.setCornerRadius(context, type_holder3, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFFF44336));
+//        SystemUI.setCornerRadius(context, type_holder4, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF228B22));
 
         textview1.setText(String.valueOf((long) (position + 1)));
         if (data.get(position).containsKey("name") && !Objects.equals(data.get(position).get("name"), "")) {
             linear1.setVisibility(View.VISIBLE);
             textview2.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-            textview2.setText(data.get(position).get("name").toString().trim());
+            textview2.setText(Objects.requireNonNull(data.get(position).get("name")).toString().trim());
             textview2.setSelected(true);
             textview2.setSingleLine(true);
         } else {
@@ -122,11 +127,18 @@ public class ListAdapter extends BaseAdapter {
         } else {
             textview4.setVisibility(View.GONE);
         }
+        linear2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DownloaderHandler downloaderHandler = new DownloaderHandler();
+                downloaderHandler.showDownloader(context, layoutInflater);
+            }
+        });
         return view;
     }
     private void setTextViewVisibility(LinearLayout layout, TextView textView, String key, int position) {
         if (data.get(position).containsKey(key)) {
-            String value = data.get(position).get(key).toString();
+            String value = Objects.requireNonNull(data.get(position).get(key)).toString();
             if (!value.isEmpty()) {
                 layout.setVisibility(View.VISIBLE);
                 textView.setText(value.trim());
@@ -137,10 +149,9 @@ public class ListAdapter extends BaseAdapter {
             layout.setVisibility(View.GONE);
         }
     }
-
     private void setImageViewVisibility(ImageView imageView, String key, int position) {
         if (data.get(position).containsKey(key)) {
-            String imageUrl = data.get(position).get(key).toString().replace("blob", "raw");
+            String imageUrl = Objects.requireNonNull(data.get(position).get(key)).toString().replaceAll("blob(?=[:/])", "raw");
             if (!imageUrl.isEmpty()) {
                 imageView.setVisibility(View.VISIBLE);
                 Glide.with(context).load(Uri.parse(imageUrl)).into(imageView);

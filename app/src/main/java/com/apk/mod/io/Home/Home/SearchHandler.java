@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -31,14 +32,16 @@ public class SearchHandler {
     private int length;
     private int number;
     private String value;
+    private LayoutInflater layoutInflater;
 
-    public SearchHandler(Context context, EditText search, LinearLayout close_holder, View search_holder, ListView listView, String string_search) {
+    public SearchHandler(Context context, LayoutInflater layoutInflater, EditText search, LinearLayout close_holder, View search_holder, ListView listView, String string_search) {
         this.context = context;
         this.search = search;
         this.close_holder = close_holder;
         this.search_holder = search_holder;
         this.listView = listView;
         this.string_search = string_search;
+        this.layoutInflater = layoutInflater;
         setupSearchListener();
     }
 
@@ -69,12 +72,12 @@ public class SearchHandler {
                         if (!(_charSeq.length() > value.length()) && value.toLowerCase().contains(_charSeq.toLowerCase())) {
                         } else {
                             datakey.remove((int) (number));
-                            listView.setAdapter(new ListAdapter(context, datakey));
+                            listView.setAdapter(new ListAdapter(context, layoutInflater, datakey));
                             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
                         }
                         number--;
                     }
-                    listView.setAdapter(new ListAdapter(context, datakey));
+                    listView.setAdapter(new ListAdapter(context, layoutInflater, datakey));
                     ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
                 } catch (Exception ignored) {
                 }

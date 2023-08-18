@@ -2,9 +2,11 @@ package com.apk.mod.io.Home.Permission;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.GradientDrawable;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,12 +26,12 @@ public class PermissionActivity extends AppCompatActivity {
         SystemUI.customizeSystemUI(this);
         LinearLayout button1 = findViewById(R.id.button1);
         LinearLayout button2 = findViewById(R.id.button2);
-        {
-            GradientDrawable SketchUi = new GradientDrawable();
-            int d = (int) getApplicationContext().getResources().getDisplayMetrics().density;
-            SketchUi.setStroke(d*3,0xFF2A2B2F);
-            button2.setBackground(SketchUi);
-        }
+        TextView permission_text = findViewById(R.id.permission_text);
+        String appName = getString(R.string.app_name);
+        String permissionMessage = getString(R.string.permission_message);
+        String combinedText = String.format("%s %s", appName, permissionMessage);
+        permission_text.setText(combinedText);
+        SystemUI.setCornerRadius(this, button2, ColorStateList.valueOf(Color.TRANSPARENT), 0, ColorStateList.valueOf(0xFF2A2B2F));
         button1.setOnClickListener(view -> {
             String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
             if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED

@@ -10,6 +10,9 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -30,6 +33,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -121,11 +125,11 @@ public class HomeActivity extends AppCompatActivity {
                 try {
                     swipeRefreshLayout.setRefreshing(false);
                     databaseList = new Gson().fromJson(response, new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
-                    ListAdapter adapter = new ListAdapter(getApplicationContext(), databaseList);
+                    ListAdapter adapter = new ListAdapter(getApplicationContext(), getLayoutInflater(), databaseList);
                     listView.setAdapter(adapter);
                     ((BaseAdapter)listView.getAdapter()).notifyDataSetChanged();
                     string_search = new Gson().toJson(databaseList);
-                    SearchHandler searchHandler = new SearchHandler(HomeActivity.this,search, close_holder, search_holder, listView, string_search);
+                    SearchHandler searchHandler = new SearchHandler(HomeActivity.this, getLayoutInflater(), search, close_holder, search_holder, listView, string_search);
                     SystemData.sortListMap(databaseList, "name", false, true);
                 }
                 catch (Exception e) {
@@ -152,6 +156,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 setData(getString(R.string.data1));
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View convertView, int position, long id) {
+                DownloaderHandler downloaderHandler = new DownloaderHandler();
+                downloaderHandler.showDownloader(HomeActivity.this, getLayoutInflater());
+
             }
         });
     }

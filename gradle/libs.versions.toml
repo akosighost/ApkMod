@@ -18,6 +18,7 @@ overscroll = "1.1.1"
 okhttp = "5.0.0-alpha.11"
 gson = "2.10.1"
 prdownloader = "0.6.0"
+glide = "4.15.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -38,6 +39,7 @@ overscroll = { group = "io.github.everythingme", name = "overscroll-decor-androi
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp"}
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson"}
 prdownloader = { group = "com.mindorks.android", name = "prdownloader", version.ref = "prdownloader"}
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide"}
 # = { group = "", name = "", version.ref = ""}
 
 [plugins]
