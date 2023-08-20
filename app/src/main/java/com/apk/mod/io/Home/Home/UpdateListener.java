@@ -133,7 +133,7 @@ public class UpdateListener {
                                                         button_holder.setVisibility(View.VISIBLE);
                                                         download_holder.setVisibility(View.GONE);
                                                         size.setVisibility(View.GONE);
-                                                        SystemData.install(context, FileExtension.defaultApkDirectory().concat(newName));
+                                                        SystemData.install(context, path.concat(newName));
                                                         button1.setOnClickListener(view12 -> {
                                                             SystemData.install(context, FileExtension.defaultApkDirectory().concat(newName));
                                                         });

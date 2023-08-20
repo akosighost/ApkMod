@@ -11,6 +11,9 @@ public class FileExtension {
     public static String defaultApkDirectory() {
         return getExternalStorageDir().concat("/ModApk/files/Apk/");
     }
+    public static String Offline() {
+        return getExternalStorageDir().concat("/ModApk/files/.Offline/");
+    }
     public static boolean isExistFile(String path) {
         File file = new File(path);
         return file.exists();

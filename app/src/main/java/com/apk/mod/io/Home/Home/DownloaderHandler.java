@@ -41,41 +41,36 @@ public class DownloaderHandler {
     private double number;
     private double check;
 
-    public void showDownloader(Context context, LayoutInflater layoutInflater, String link, String filename) {
+    public void showDownloader(Context context, LayoutInflater layoutInflater, String link, String path, String filename,final int num) {
         downloadDialog = new AlertDialog.Builder(context).create();
         LayoutInflater cvLI = layoutInflater;
         View cvCV = (View) cvLI.inflate(R.layout.downloader_layout, null);
         downloadDialog.setView(cvCV);
         Objects.requireNonNull(downloadDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         final LinearLayout bg = (LinearLayout) cvCV.findViewById(R.id.linear1);
-        final TextView value = (TextView) cvCV.findViewById(R.id.value);
+        final LinearLayout download_holder = (LinearLayout) cvCV.findViewById(R.id.download_holder);
         final TextView title = (TextView) cvCV.findViewById(R.id.title);
+        final TextView value = (TextView) cvCV.findViewById(R.id.value);
         final TextView percent = (TextView) cvCV.findViewById(R.id.percent);
         final TextView button1 = (TextView) cvCV.findViewById(R.id.b1);
         final TextView button2 = (TextView) cvCV.findViewById(R.id.b2);
         final ProgressBar progressBar = (ProgressBar) cvCV.findViewById(R.id.progress);
         final CheckBox checkBox = (CheckBox) cvCV.findViewById(R.id.checkbox);
-        checkBox.setChecked(true);
-        SystemUI.setCornerRadius(context, bg, ColorStateList.valueOf(0xFF202226), 20, ColorStateList.valueOf(Color.TRANSPARENT), 0, 0, false);
-        try {
-            if (Double.parseDouble(save.getString("save_switch", "")) == 0) {
-                checkBox.setChecked(true);
-            } else {
-                checkBox.setChecked(false);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (num == 1) {
+            title.setVisibility(View.VISIBLE);
+            value.setVisibility(View.VISIBLE);
+            download_holder.setVisibility(View.VISIBLE);
+        } else if (num == 2) {
+            title.setVisibility(View.GONE);
+            value.setVisibility(View.GONE);
+            download_holder.setVisibility(View.GONE);
         }
-//        String url = data.get((int) position).get("link").toString().replace("blob", "raw").trim();
-//        String path = DataExtension.defaultApkDirectory();
-//        String name = data.get((int) position).get("name").toString().concat(" ".concat(data.get((int) position).get("version").toString().concat(".apk")));
+        SystemUI.setCornerRadius(context, bg, ColorStateList.valueOf(0xFF202226), 20, ColorStateList.valueOf(Color.TRANSPARENT), 0, 0, false);
 
         PRDownloader.initialize(context);
-        PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
-                .setDatabaseEnabled(true)
-                .build();
+        PRDownloaderConfig config = PRDownloaderConfig.newBuilder().setDatabaseEnabled(true).build();
         PRDownloader.initialize(context, config);
-        downloadId = PRDownloader.download(link, FileExtension.defaultApkDirectory(), filename)
+        downloadId = PRDownloader.download(link, path, filename)
                 .build()
                 .setOnStartOrResumeListener(new OnStartOrResumeListener() {
                     @Override
@@ -95,6 +90,7 @@ public class DownloaderHandler {
                 .setOnProgressListener(new OnProgressListener() {
                     @Override
                     public void onProgress(Progress progress) {
+                        progressBar.setIndeterminate(false);
                         long progressPercent = progress.currentBytes * 100 / progress.totalBytes;
                         value.setText(PRDownloaderUtils.getProgressDisplayLine(progress.currentBytes, progress.totalBytes));
                         progressBar.setProgress((int) progressPercent);
@@ -104,26 +100,20 @@ public class DownloaderHandler {
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                        title.setText(R.string.download_success);
-                        downloadDialog.dismiss();
-                        SystemData.install(context, FileExtension.defaultApkDirectory().concat(filename));
+                        if (num == 1) {
+                            title.setText(R.string.download_success);
+                            downloadDialog.dismiss();
+                            SystemData.install(context, path.concat(filename));
+                        } else if (num == 2) {
+                            downloadDialog.dismiss();
+                        }
                     }
-
                     @Override
                     public void onError(Error error) {
                         downloadDialog.dismiss();
                         Toast.makeText(context, "Unable to download!", Toast.LENGTH_SHORT).show();
                     }
                 });
-        checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (b) {
-                check = 0;
-                save.edit().putString("save_switch", String.valueOf((long) (check))).apply();
-            } else {
-                check = 1;
-                save.edit().putString("save_switch", String.valueOf((long) (check))).apply();
-            }
-        });
         button1.setOnClickListener(view1 -> {
             if (number == 1) {
                 number = 0;

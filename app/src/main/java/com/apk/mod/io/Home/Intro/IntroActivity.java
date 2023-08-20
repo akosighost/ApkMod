@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.apk.mod.io.Home.Extension.FileExtension;
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.apk.mod.io.Home.Home.HomeActivity;
 import com.apk.mod.io.Home.Permission.PermissionActivity;
@@ -38,6 +39,7 @@ public class IntroActivity extends AppCompatActivity {
         new Thread(() -> {
             SystemClock.sleep(INTRO_DELAY);
             runOnUiThread(() -> {
+                FileExtension.deleteFile(FileExtension.defaultApkDirectory());
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
                         checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                     intent.setClass(getApplicationContext(), PermissionActivity.class);

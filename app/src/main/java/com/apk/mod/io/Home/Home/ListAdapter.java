@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apk.mod.io.Home.Extension.FileExtension;
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.apk.mod.io.R;
 import com.bumptech.glide.Glide;
@@ -32,7 +34,6 @@ public class ListAdapter extends BaseAdapter {
         this.data = arr;
         this.layoutInflater = layoutInflater;
     }
-
     @Override
     public int getCount() {
         return data.size();
@@ -76,6 +77,7 @@ public class ListAdapter extends BaseAdapter {
         final ImageView install = view.findViewById(R.id.install);
         final ImageView delete = view.findViewById(R.id.delete);
         final ImageView apkicon = view.findViewById(R.id.image);
+        final ImageView option = view.findViewById(R.id.option);
 
         setTextViewVisibility(type_holder1, type1, "type1", position);
         setTextViewVisibility(type_holder2, type2, "type2", position);
@@ -97,14 +99,11 @@ public class ListAdapter extends BaseAdapter {
             end_of_list.setVisibility(View.GONE);
         }
         SystemUI.setCornerRadius(context, linear1, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF000000), 0, 0, false);
-        SystemUI.setCornerRadius(context, linear2, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF2A2B2F), 2, 20, false);
-//        SystemUI.gradientDrawable(linear1, 0, 0, 0, "#FF202226", "#000000", false);
-//        SystemUI.gradientDrawable(linear2, 0, 2, 20, "#FF202226", "#FF2A2B2F", false);
-//        SystemUI.setCornerRadius(context, type_holder1, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF9E9E9E));
-//        SystemUI.setCornerRadius(context, type_holder2, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF2196F3));
-//        SystemUI.setCornerRadius(context, type_holder3, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFFF44336));
-//        SystemUI.setCornerRadius(context, type_holder4, ColorStateList.valueOf(Color.TRANSPARENT),300,ColorStateList.valueOf(0xFF228B22));
-
+        SystemUI.setCornerRadius(context, linear2, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF2A2B2F), 2, 10, false);
+        SystemUI.setCornerRadius(context, type_holder1, ColorStateList.valueOf(Color.TRANSPARENT), 300, ColorStateList.valueOf(0xFF9E9E9E), 1, 0, false);
+        SystemUI.setCornerRadius(context, type_holder2, ColorStateList.valueOf(Color.TRANSPARENT), 300, ColorStateList.valueOf(0xFF2196F3), 1, 0, false);
+        SystemUI.setCornerRadius(context, type_holder3, ColorStateList.valueOf(Color.TRANSPARENT), 300, ColorStateList.valueOf(0xFFF44336), 1, 0, false);
+        SystemUI.setCornerRadius(context, type_holder4, ColorStateList.valueOf(Color.TRANSPARENT), 300, ColorStateList.valueOf(0xFF228B22), 1, 0, false);
         textview1.setText(String.valueOf((long) (position + 1)));
         if (data.get(position).containsKey("name") && !Objects.equals(data.get(position).get("name"), "")) {
             linear1.setVisibility(View.VISIBLE);
@@ -127,13 +126,24 @@ public class ListAdapter extends BaseAdapter {
         } else {
             textview4.setVisibility(View.GONE);
         }
+
         linear2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String link = data.get((int) position).get("link").toString().replace("blob", "raw").trim();
+                String path = FileExtension.defaultApkDirectory();
                 String filename = data.get((int) position).get("name").toString().concat(" ".concat(data.get((int) position).get("version").toString().concat(".apk")));
                 DownloaderHandler downloaderHandler = new DownloaderHandler();
-                downloaderHandler.showDownloader(context, layoutInflater, link, filename);
+                downloaderHandler.showDownloader(context, layoutInflater, link, path, filename, 1);
+            }
+        });
+        option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String link = data.get((int) position).get("link").toString().replace("blob", "raw").trim();
+                String path = FileExtension.Offline();
+                String filename = data.get((int) position).get("name").toString().concat(" ".concat(data.get((int) position).get("version").toString().concat(".apk")));
+                PopupMenu.showPopupMenu(context, layoutInflater, v, link, path, filename, 2);
             }
         });
         return view;

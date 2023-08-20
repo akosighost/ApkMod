@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.apk.mod.io.Home.Extension.FileExtension;
 import com.apk.mod.io.Home.Extension.SystemUI;
@@ -31,34 +32,32 @@ public class PermissionActivity extends AppCompatActivity {
         String permissionMessage = getString(R.string.permission_message);
         String combinedText = String.format("%s %s", appName, permissionMessage);
         permission_text.setText(combinedText);
-        SystemUI.setCornerRadius(this, button2, ColorStateList.valueOf(Color.TRANSPARENT), 0, ColorStateList.valueOf(0xFF2A2B2F), 3, 0, false);
+        SystemUI.setCornerRadius(this, button2, ColorStateList.valueOf(Color.TRANSPARENT), 0, ColorStateList.valueOf(0xFF2A2B2F), 2, 0, false);
         button1.setOnClickListener(view -> {
             String[] permissions = {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE};
-            if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_DENIED
-                    || checkSelfPermission(permissions[1]) == PackageManager.PERMISSION_DENIED) {
-                requestPermissions(permissions, 1000);
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                requestPermissions(new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
             } else {
-                make();
                 intent.setClass(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
         button2.setOnClickListener(view -> finishAffinity());
     }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1000 && grantResults.length == 2
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            make();
             intent.setClass(getApplicationContext(), HomeActivity.class);
             startActivity(intent);
-        }
-    }
-    private void make() {
-        if (!FileExtension.isExistFile(FileExtension.defaultApkDirectory())) {
-            FileExtension.makeDirectory(FileExtension.defaultApkDirectory());
         }
     }
 }
