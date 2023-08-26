@@ -11,8 +11,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.apk.mod.io.Home.Extension.FileExtension;
+import com.apk.mod.io.Home.Extension.SystemData;
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.apk.mod.io.Home.Home.HomeActivity;
+import com.apk.mod.io.Home.Offline.OfflineActivity;
 import com.apk.mod.io.Home.Permission.PermissionActivity;
 import com.apk.mod.io.R;
 
@@ -45,8 +47,13 @@ public class IntroActivity extends AppCompatActivity {
                     intent.setClass(getApplicationContext(), PermissionActivity.class);
                     startActivity(intent);
                 } else {
-                    intent.setClass(getApplicationContext(), HomeActivity.class);
-                    startActivity(intent);
+                    if (SystemData.isConnected(this)) {
+                        intent.setClass(this, HomeActivity.class);
+                        startActivity(intent);
+                    } else {
+                        intent.setClass(this, OfflineActivity.class);
+                        startActivity(intent);
+                    }
                 }
             });
         }).start();

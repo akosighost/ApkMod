@@ -1,19 +1,15 @@
 package com.apk.mod.io.Home.Home;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +29,7 @@ import com.apk.mod.io.Home.Extension.SystemData;
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.apk.mod.io.Home.Network.RequestNetwork;
 import com.apk.mod.io.Home.Network.RequestNetworkController;
+import com.apk.mod.io.Home.Offline.OfflineActivity;
 import com.apk.mod.io.Home.Permission.PermissionActivity;
 import com.apk.mod.io.Home.Service.BackgroundService;
 import com.apk.mod.io.R;
@@ -45,36 +42,37 @@ import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private ListView listView;
-    private EditText search;
     private LinearLayout close_holder;
     private LinearLayout search_holder;
-    private ImageView close;
-    private LinearLayout linear1;
     private LinearLayout spinner_holder;
+    private ListView listView;
+    private EditText search;
+    private ImageView close;
+    private ImageView offline;
     private HorizontalScrollView scroll1;
     private Spinner spinner;
     private RequestNetwork internet;
+    private RequestNetwork dropdown;
     private RequestNetwork.RequestListener _internet_request_listener;
+    private RequestNetwork.RequestListener _dropdown_request_listener;
     private RequestNetwork update;
     private RequestNetwork.RequestListener _update_request_listener;
-    private SharedPreferences save;
-    private Intent intent = new Intent();
     private ArrayList<HashMap<String, Object>> spin = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> databaseList = new ArrayList<>();
+    private ArrayList<HashMap<String, Object>> databasedrop = new ArrayList<>();
     private String string_search;
     private static final int BACK_PRESS_DELAY = 2000; // 2 seconds
     private long backPressTime;
-    private double language = 0;
+    private ProgressDialog progressDialog;
+    private Intent intent = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         SystemUI.customizeSystemUI(this);
-        intent = new Intent(this, BackgroundService.class);
-        startService(intent);
+        Intent background = new Intent(this, BackgroundService.class);
+        startService(background);
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
                 checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             intent.setClass(getApplicationContext(), PermissionActivity.class);
@@ -83,6 +81,10 @@ public class HomeActivity extends AppCompatActivity {
             make();
             initialize(savedInstanceState);
             initialize();
+            showProgressDialog();
+            setDataUpdate(getString(R.string.update_data));
+            setData(getString(R.string.Apps));
+            dropdown.startRequestNetwork(RequestNetworkController.GET, getString(R.string.dropdown_down), "", _dropdown_request_listener);
         }
     }
     @Override
@@ -97,43 +99,38 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setDataUpdate(getString(R.string.update_data));
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            intent.setClass(getApplicationContext(), PermissionActivity.class);
+            startActivity(intent);
+        } else {
+            setDataUpdate(getString(R.string.update_data));
+        }
     }
     @Override
     protected void onStart() {
         super.onStart();
-        swipeRefreshLayout.setRefreshing(true);
-        setDataUpdate(getString(R.string.update_data));
-        setData(getString(R.string.data1));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
-            if (resultCode == RESULT_OK) {
-                // Installation was successful
-                Toast.makeText(this, "Installation success!", Toast.LENGTH_SHORT).show();
-            } else {
-                // Installation was denied or failed
-                Toast.makeText(this, "Installation denied or failed", Toast.LENGTH_SHORT).show();
-            }
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+                checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            intent.setClass(getApplicationContext(), PermissionActivity.class);
+            startActivity(intent);
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initialize(Bundle savedInstanceState) {
         internet = new RequestNetwork(this);
+        dropdown = new RequestNetwork(this);
         update = new RequestNetwork(this);
-        swipeRefreshLayout = findViewById(R.id.swipe);
         search = findViewById(R.id.search);
         search_holder = findViewById(R.id.search_holder);
         close_holder = findViewById(R.id.close_holder);
         close = findViewById(R.id.close);
         listView = findViewById(R.id.listview);
-        linear1 = findViewById(R.id.linear1);
         scroll1 = findViewById(R.id.scroll1);
         spinner = findViewById(R.id.spinner);
         spinner_holder = findViewById(R.id.spinner_holder);
+        offline = findViewById(R.id.offline);
         close.setOnClickListener(view -> {
             search.setText("");
             SystemData.hideKeyboard(this);
@@ -142,8 +139,8 @@ public class HomeActivity extends AppCompatActivity {
         _internet_request_listener = new RequestNetwork.RequestListener() {
             @Override
             public void onResponse(String tag, String response, HashMap<String, Object> _param3) {
+                hideProgressDialog();
                 try {
-                    swipeRefreshLayout.setRefreshing(false);
                     databaseList = new Gson().fromJson(response, new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
                     ListAdapter adapter = new ListAdapter(getApplicationContext(), getLayoutInflater(), databaseList);
                     listView.setAdapter(adapter);
@@ -154,7 +151,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 catch (Exception e) {
                     Toast.makeText(HomeActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
             @Override
@@ -172,11 +168,23 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         };
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        _dropdown_request_listener = new RequestNetwork.RequestListener() {
             @Override
-            public void onRefresh() {
-                setData(getString(R.string.data1));
+            public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
+
+                databasedrop = new Gson().fromJson(response, new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+                spinner.setAdapter(new Spinner1Adapter(databasedrop));
+                ((BaseAdapter)spinner.getAdapter()).notifyDataSetChanged();
             }
+
+            @Override
+            public void onErrorResponse(String tag, String message) {
+
+            }
+        };
+        offline.setOnClickListener(v -> {
+            intent.setClass(getApplicationContext(), OfflineActivity.class);
+            startActivity(intent);
         });
     }
     private void initialize() {
@@ -186,53 +194,60 @@ public class HomeActivity extends AppCompatActivity {
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
         listView.setDividerHeight(0);
-        {
-            HashMap<String, Object> _item = new HashMap<>();
-            _item.put("language", "Categories");
-            spin.add(_item);
-        }
-        {
-            HashMap<String, Object> _item = new HashMap<>();
-            _item.put("language", "Android IDE");
-            spin.add(_item);
-        }
-        spinner.setAdapter(new Spinner1Adapter(spin));
+        scroll1.setHorizontalScrollBarEnabled(false);
+        scroll1.setVerticalScrollBarEnabled(false);
     }
     public class Spinner1Adapter extends BaseAdapter {
 
-        ArrayList<HashMap<String, Object>> _data;
+        ArrayList<HashMap<String, Object>> data;
 
         public Spinner1Adapter(ArrayList<HashMap<String, Object>> _arr) {
-            _data = _arr;
+            data = _arr;
         }
-
         @Override
         public int getCount() {
-            return _data.size();
+            return data.size();
         }
-
         @Override
         public HashMap<String, Object> getItem(int _index) {
-            return _data.get(_index);
+            return data.get(_index);
         }
-
         @Override
         public long getItemId(int _index) {
             return _index;
         }
-
         @Override
-        public View getView(final int _position, View _v, ViewGroup _container) {
+        public View getView(final int position, View _v, ViewGroup _container) {
             LayoutInflater _inflater = getLayoutInflater();
             View _view = _v;
             if (_view == null) {
-                _view = _inflater.inflate(R.layout.language, null);
+                _view = _inflater.inflate(R.layout.dropdown, null);
             }
-
             final TextView textview1 = _view.findViewById(R.id.textview1);
 
-            textview1.setText(_data.get((int)_position).get("language").toString());
-//            type = _data.get((int)_position).get("language").toString();
+            textview1.setText(data.get((int)position).get("name").toString());
+
+            if (Objects.equals(data.get((int) position).get("name"), "")) {
+                textview1.setVisibility(View.GONE);
+            }
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    String selectedItem = parentView.getItemAtPosition(position).toString();
+
+                    if (!Objects.equals(data.get((int) position).get("link"), "")) {
+                        showProgressDialog();
+                        setData(Objects.requireNonNull(data.get((int) position).get("link")).toString());
+                    } else {
+                        Toast.makeText(HomeActivity.this, getString(R.string.not_available), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // Do nothing here
+                }
+            });
             return _view;
         }
     }
@@ -251,6 +266,36 @@ public class HomeActivity extends AppCompatActivity {
             if (!FileExtension.isExistFile(directoryPath)) {
                 FileExtension.makeDirectory(directoryPath);
             }
+        }
+    }
+    private void showProgressDialog() {
+        new SimulatedTask();
+        progressDialog = new ProgressDialog(HomeActivity.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Use circular style
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+    private void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
+    private class SimulatedTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            // Simulate a time-consuming task
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            hideProgressDialog();
         }
     }
 }

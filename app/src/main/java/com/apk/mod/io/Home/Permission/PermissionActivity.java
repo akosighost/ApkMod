@@ -13,8 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.apk.mod.io.Home.Extension.FileExtension;
+import com.apk.mod.io.Home.Extension.SystemData;
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.apk.mod.io.Home.Home.HomeActivity;
+import com.apk.mod.io.Home.Offline.OfflineActivity;
 import com.apk.mod.io.R;
 
 public class PermissionActivity extends AppCompatActivity {
@@ -38,8 +40,13 @@ public class PermissionActivity extends AppCompatActivity {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                 requestPermissions(new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
             } else {
-                intent.setClass(getApplicationContext(), HomeActivity.class);
-                startActivity(intent);
+                if (SystemData.isConnected(this)) {
+                    intent.setClass(this, HomeActivity.class);
+                    startActivity(intent);
+                } else {
+                    intent.setClass(this, OfflineActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         button2.setOnClickListener(view -> finishAffinity());

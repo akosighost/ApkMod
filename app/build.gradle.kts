@@ -46,7 +46,6 @@ dependencies {
     implementation(platform(libs.firebase.database.bom))
     implementation(libs.fadingedgelayout)
     implementation(libs.swiperefreshlayout)
-    implementation(libs.overscroll)
     implementation(libs.okhttp)
     implementation(libs.gson)
     implementation(libs.prdownloader)

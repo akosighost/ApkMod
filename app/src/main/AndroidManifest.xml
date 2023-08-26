@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- Add the following permission for notification channels (Android 8.0 and higher) -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
@@ -28,6 +27,9 @@
         android:theme="@style/Theme.ModApk"
         tools:targetApi="31" >
         <activity
+            android:name=".Home.Offline.OfflineActivity"
+            android:exported="false" />
+        <activity
             android:name=".Home.Intro.IntroActivity"
             android:exported="true" >
             <intent-filter>
@@ -36,9 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Home.Permission.PermissionActivity"
-            android:exported="true" />
         <activity
             android:name=".Home.Home.HomeActivity"
             android:exported="true" >

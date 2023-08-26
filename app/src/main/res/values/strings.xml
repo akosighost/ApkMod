@@ -5,9 +5,11 @@
     <string name="app_name">ApkMod</string>
     <string name="please_wait">Please Wait</string>
     <string name="todo">TODO</string>
-    <string name="data1">https://akosighost.github.io/Apk/</string>
-    <string name="data2">https://akosighost.github.io/Apk-Games/</string>
+    <string name="Apps">https://akosighost.github.io/Apk/</string>
+    <string name="Games">https://akosighost.github.io/Apk-Games/</string>
+    <string name="IDE">https://akosighost.github.io/Android-IDE/</string>
     <string name="update_data">https://akosighost.github.io/ApkHub-Update/</string>
+    <string name="dropdown_down">https://akosighost.github.io/DropDown-ModApk/</string>
     <string name="cancel_download_dialog">C A N C E L</string>
     <string name="pause_download_dialog">P A U S E</string>
     <string name="resume_download_dialog">R E S U M E</string>
@@ -36,4 +38,7 @@
     <string name="permission_message"> needs access to your Storage. This permission is used to Share and store documents, media, and files on your device. (Required)</string>
     <string name="next">CONTINUE</string>
     <string name="quit">QUIT</string>
+    <string name="not_available">
+        Not available for now!
+    </string>
 </resources>
