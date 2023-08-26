@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,6 +37,8 @@ import com.apk.mod.io.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -45,6 +48,7 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout close_holder;
     private LinearLayout search_holder;
     private LinearLayout spinner_holder;
+    private LinearLayout offline_holder;
     private ListView listView;
     private EditText search;
     private ImageView close;
@@ -125,6 +129,7 @@ public class HomeActivity extends AppCompatActivity {
         search = findViewById(R.id.search);
         search_holder = findViewById(R.id.search_holder);
         close_holder = findViewById(R.id.close_holder);
+        offline_holder = findViewById(R.id.offline_holder);
         close = findViewById(R.id.close);
         listView = findViewById(R.id.listview);
         scroll1 = findViewById(R.id.scroll1);
@@ -182,12 +187,13 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         };
-        offline.setOnClickListener(v -> {
+        offline_holder.setOnClickListener(v -> {
             intent.setClass(getApplicationContext(), OfflineActivity.class);
             startActivity(intent);
         });
     }
     private void initialize() {
+        SystemUI.setCornerRadius(this, offline_holder, ColorStateList.valueOf(0xFF2A2B2F), 300, ColorStateList.valueOf(Color.TRANSPARENT), 0, 0, false);
         SystemUI.setCornerRadius(this, spinner_holder, ColorStateList.valueOf(0xFF202226), 5, ColorStateList.valueOf(0xFF2A2B2F), 2, 0, false);
         SystemUI.setCornerRadius(this, search, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF2A2B2F), 2, 0, false);
         listView.setHorizontalScrollBarEnabled(false);

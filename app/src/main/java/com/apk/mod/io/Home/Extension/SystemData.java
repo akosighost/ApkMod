@@ -11,7 +11,11 @@ import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -71,6 +75,21 @@ public class SystemData {
             return androidx.core.content.FileProvider.getUriForFile(context,context.getApplicationContext().getPackageName() + ".provider", file);
         } else {
             return Uri.fromFile(file);
+        }
+    }
+    public static void shareApkFile(Context context, File apkFile) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("application/vnd.android.package-archive");
+        Uri apkUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", apkFile);
+        intent.putExtra(Intent.EXTRA_STREAM, apkUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            Intent chooser = Intent.createChooser(intent, "Share APK using");
+            chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(chooser);
+        } catch (ActivityNotFoundException e) {
+            // Handle if no suitable app to handle sharing
+            Toast.makeText(context, "No app found to share the APK.", Toast.LENGTH_SHORT).show();
         }
     }
 }

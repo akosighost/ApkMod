@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,6 +21,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -36,7 +39,9 @@ import android.widget.Toast;
 import com.apk.mod.io.Home.Extension.FileExtension;
 import com.apk.mod.io.Home.Extension.SystemData;
 import com.apk.mod.io.Home.Extension.SystemUI;
+import com.apk.mod.io.Home.Home.DownloaderHandler;
 import com.apk.mod.io.Home.Home.HomeActivity;
+import com.apk.mod.io.Home.Home.PopupMenu;
 import com.apk.mod.io.R;
 
 import java.io.File;
@@ -52,7 +57,6 @@ public class OfflineActivity extends AppCompatActivity {
     private ImageView back;
     private SwipeRefreshLayout swipe;
     private List<ApkFileData> fileData = new ArrayList<>();
-    private AnimationUtils animationUtils;
     private static final int BACK_PRESS_DELAY = 2000; // 2 seconds
     private long backPressTime;
 
@@ -62,7 +66,7 @@ public class OfflineActivity extends AppCompatActivity {
             finish();
         } else if (!SystemData.isConnected(getApplicationContext())) {
             if (System.currentTimeMillis() - backPressTime < BACK_PRESS_DELAY) {
-                finishAffinity(); // Exit the app or perform your desired action here
+                finishAffinity();
             } else {
                 Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
                 backPressTime = System.currentTimeMillis();
@@ -98,28 +102,14 @@ public class OfflineActivity extends AppCompatActivity {
                 finishAffinity();
             }
         });
-//        OverScrollDecoratorHelper.setUpOverScroll(listView);
         listView.setHorizontalScrollBarEnabled(false);
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
         listView.setDividerHeight(0);
         // Specify the directory path where your APKs are stored
-        String directoryPath = FileExtension.defaultApkDirectory();
+        String directoryPath = FileExtension.Offline();
 
-        List<File> apkFiles = new ArrayList<>();
-        File directory = new File(directoryPath);
-
-        // Make sure the directory exists and is a directory
-        if (directory.exists() && directory.isDirectory()) {
-            File[] files = directory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isFile() && file.getName().toLowerCase().endsWith(".apk") || file.isFile() && file.getName().toLowerCase().endsWith(".txt")) {
-                        apkFiles.add(file);
-                    }
-                }
-            }
-        }
+        List<File> apkFiles = getFiles(directoryPath);
         ArrayAdapter<File> adapter = new ArrayAdapter<File>(this, R.layout.home_list, R.id.textview2, apkFiles) {
             @Override
             public View getView(int position, View view, @NonNull ViewGroup parent) {
@@ -148,8 +138,12 @@ public class OfflineActivity extends AppCompatActivity {
                 final ImageView install = view.findViewById(R.id.install);
                 final ImageView delete = view.findViewById(R.id.delete);
                 final ImageView image = view.findViewById(R.id.image);
+                final ImageView option = view.findViewById(R.id.option);
                 textview4.setVisibility(View.GONE);
                 type_holder1.setVisibility(View.GONE);
+                type_holder2.setVisibility(View.GONE);
+                type_holder3.setVisibility(View.GONE);
+                type_holder4.setVisibility(View.GONE);
                 install.setVisibility(View.GONE);
                 delete.setVisibility(View.GONE);
                 image.setVisibility(View.GONE);
@@ -159,44 +153,12 @@ public class OfflineActivity extends AppCompatActivity {
                 type2.setTextColor(0xFF228B22);
                 type3.setTextColor(0xFF2196F3);
                 type4.setTextColor(0xFFF44336);
-                {
-                    android.graphics.drawable.GradientDrawable SketchUi = new android.graphics.drawable.GradientDrawable();
-                    int d = (int) getApplicationContext().getResources().getDisplayMetrics().density;
-                    SketchUi.setCornerRadius(d * 300);
-                    SketchUi.setStroke(d, 0xFF9E9E9E);
-                    type_holder1.setBackground(SketchUi);
-                }
-                {
-                    android.graphics.drawable.GradientDrawable SketchUi = new android.graphics.drawable.GradientDrawable();
-                    int d = (int) getApplicationContext().getResources().getDisplayMetrics().density;
-                    SketchUi.setCornerRadius(d * 300);
-                    SketchUi.setStroke(d, 0xFF228B22);
-                    type_holder2.setBackground(SketchUi);
-                }
-                {
-                    android.graphics.drawable.GradientDrawable SketchUi = new android.graphics.drawable.GradientDrawable();
-                    int d = (int) getApplicationContext().getResources().getDisplayMetrics().density;
-                    SketchUi.setCornerRadius(d * 300);
-                    SketchUi.setStroke(d, 0xFF2196F3);
-                    type_holder3.setBackground(SketchUi);
-                }
-                {
-                    android.graphics.drawable.GradientDrawable SketchUi = new android.graphics.drawable.GradientDrawable();
-                    int d = (int) getApplicationContext().getResources().getDisplayMetrics().density;
-                    SketchUi.setCornerRadius(d * 300);
-                    SketchUi.setStroke(d, 0xFFF44336);
-                    type_holder4.setBackground(SketchUi);
-                }
+                SystemUI.setCornerRadius(getApplicationContext(), linear1, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF000000), 0, 0, false);
+                SystemUI.setCornerRadius(getApplicationContext(), linear2, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF2A2B2F), 2, 10, false);
                 if (position == getCount() - 1) {
                     end_of_list.setVisibility(View.VISIBLE);
                 } else {
                     end_of_list.setVisibility(View.GONE);
-                }
-                {
-                    {
-                        gradientDrawable(linear1, 0, 0, 0, "#FF202226", "#000000", false);
-                        gradientDrawable(linear2, 0, 2, 20, "#FF202226", "#FF2A2B2F", false);
-                    }
                 }
                 File apkFile = getItem(position);
                 if (apkFile != null) {
@@ -208,11 +170,6 @@ public class OfflineActivity extends AppCompatActivity {
                     String fileSizeFormatted = formatFileSize(fileSize);
                     filesize.setText(fileSizeFormatted);
                 }
-                if (String.valueOf(apkFile).contains(".apk")) {
-                    type2.setText(R.string.install);
-                } else if (String.valueOf(apkFile).contains(".txt")) {
-                    type2.setText(R.string.open);
-                }
 //                assert apkFile != null;
 //                Drawable apkIcon = getApkIcon(apkFile);
 //                if (apkIcon != null) {
@@ -221,19 +178,44 @@ public class OfflineActivity extends AppCompatActivity {
 //                    apkicon.setImageResource(R.drawable.update); // Set a default image if no icon found
 //                }
                 textview1.setText(String.valueOf((long) (position + 1)));
+                option.setOnClickListener(v -> {
+                    Context wrapper = new ContextThemeWrapper(getApplicationContext(), R.style.popupMenuStyle);
+                    android.widget.PopupMenu popupMenu = new android.widget.PopupMenu(wrapper, v);
+                    popupMenu.inflate(R.menu.offline_menu);
+
+                    popupMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            int itemId = item.getItemId();
+
+                            if (itemId == R.id.install) {
+                                SystemData.install(getApplicationContext(), String.valueOf(apkFile));
+                                return true;
+                            } else if (itemId == R.id.delete) {
+                                if (apkFile != null) {
+                                    apkFiles.remove(apkFile);
+                                    apkFile.delete();
+                                    Parcelable listState = listView.onSaveInstanceState();
+                                    sortApkFilesByTime();
+                                    ((BaseAdapter)listView.getAdapter()).notifyDataSetChanged();
+                                    listView.onRestoreInstanceState(listState);
+                                }
+                                return true;
+                            } else if (itemId == R.id.share) {
+                                SystemData.shareApkFile(getApplicationContext(), apkFile);
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    });
+                    popupMenu.show();
+                });
                 type2.setOnClickListener(view1 -> {
                     if (String.valueOf(apkFile).contains(".apk")) {
-                        install(String.valueOf(apkFile));
+                        SystemData.install(getApplicationContext(), String.valueOf(apkFile));
                     } else if (String.valueOf(apkFile).contains(".txt")) {
                         openTxtFile(apkFile);
-                    }
-                });
-                type3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (apkFile != null) {
-                            shareApkFile(apkFile);
-                        }
                     }
                 });
                 type4.setOnClickListener(v -> {
@@ -255,20 +237,25 @@ public class OfflineActivity extends AppCompatActivity {
         ((BaseAdapter)listView.getAdapter()).notifyDataSetChanged();
         listView.onRestoreInstanceState(listState);
     }
-    private void shareApkFile(File apkFile) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("application/vnd.android.package-archive");
-        Uri apkUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", apkFile);
-        intent.putExtra(Intent.EXTRA_STREAM, apkUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        try {
-            startActivity(Intent.createChooser(intent, "Share APK using"));
-        } catch (ActivityNotFoundException e) {
-            // Handle if no suitable app to handle sharing
-            Toast.makeText(this, "No app found to share the APK.", Toast.LENGTH_SHORT).show();
-        }
-    }
 
+    @NonNull
+    private static List<File> getFiles(String directoryPath) {
+        List<File> apkFiles = new ArrayList<>();
+        File directory = new File(directoryPath);
+
+        // Make sure the directory exists and is a directory
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile() && file.getName().toLowerCase().endsWith(".apk") || file.isFile() && file.getName().toLowerCase().endsWith(".txt")) {
+                        apkFiles.add(file);
+                    }
+                }
+            }
+        }
+        return apkFiles;
+    }
     private Drawable getApkIcon(File apkFile) {
         PackageManager pm = getPackageManager();
         PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFile.getAbsolutePath(), 0);
@@ -328,50 +315,5 @@ public class OfflineActivity extends AppCompatActivity {
             unitIndex++;
         }
         return new DecimalFormat("#,##0.#").format(size) + " " + units[unitIndex];
-    }
-    public void install(final String PATH) {
-        java.io.File file = new java.io.File(PATH);
-        if (file.exists()) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uriFromFile(getApplicationContext(), new java.io.File(PATH)), "application/vnd.android.package-archive");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            try {
-                getApplicationContext().startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                e.printStackTrace();
-                Log.e("TAG", "Error in opening the file!");
-            }
-        } else {
-            Toast.makeText(getApplicationContext(),"installing",Toast.LENGTH_LONG).show();
-        }
-    }
-    Uri uriFromFile(Context context, java.io.File file) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return androidx.core.content.FileProvider.getUriForFile(context,context.getApplicationContext().getPackageName() + ".provider", file);
-        } else {
-            return Uri.fromFile(file);
-        }
-    }
-    public void gradientDrawable(final View view, final double _radius, final double _stroke, final double _shadow, final String _color, final String _borderColor, final boolean _ripple) {
-        if (_ripple) {
-            android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
-            gd.setColor(Color.parseColor(_color));
-            gd.setCornerRadius((int)_radius);
-            gd.setStroke((int)_stroke,Color.parseColor(_borderColor));
-            view.setElevation((int)_shadow);
-            android.content.res.ColorStateList clrb = new android.content.res.ColorStateList(new int[][]{new int[]{}}, new int[]{Color.parseColor("#9E9E9E")});
-            android.graphics.drawable.RippleDrawable ripdrb = new android.graphics.drawable.RippleDrawable(clrb , gd, null);
-            view.setClickable(true);
-            view.setBackground(ripdrb);
-        }
-        else {
-            android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
-            gd.setColor(Color.parseColor(_color));
-            gd.setCornerRadius((int)_radius);
-            gd.setStroke((int)_stroke,Color.parseColor(_borderColor));
-            view.setBackground(gd);
-            view.setElevation((int)_shadow);
-        }
     }
 }
