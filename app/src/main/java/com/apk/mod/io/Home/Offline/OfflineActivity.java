@@ -106,7 +106,6 @@ public class OfflineActivity extends AppCompatActivity {
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
         listView.setDividerHeight(0);
-        // Specify the directory path where your APKs are stored
         String directoryPath = FileExtension.Offline();
 
         List<File> apkFiles = getFiles(directoryPath);

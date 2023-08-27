@@ -10,14 +10,10 @@
         TODO</string>
     <string name="Apps">
         https://akosighost.github.io/Apk/</string>
-    <string name="Games">
-        https://akosighost.github.io/Apk-Games/</string>
-    <string name="IDE">
-        https://akosighost.github.io/Android-IDE/</string>
-    <string name="update_data">
-        https://akosighost.github.io/ApkMod-Update/</string>
-    <string name="dropdown_down">
-        https://akosighost.github.io/DropDown-ModApk/</string>
+    <string name="Games">https://akosighost.github.io/Apk-Games/</string>
+    <string name="IDE">https://akosighost.github.io/Android-IDE/</string>
+    <string name="update_data">https://akosighost.github.io/ApkMod-Update/</string>
+    <string name="dropdown_down">https://akosighost.github.io/DropDown-ModApk/</string>
     <string name="cancel_download_dialog">
         C A N C E L</string>
     <string name="pause_download_dialog">

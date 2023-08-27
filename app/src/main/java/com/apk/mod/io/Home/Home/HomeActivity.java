@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+
 public class HomeActivity extends AppCompatActivity {
 
     private LinearLayout close_holder;
@@ -200,6 +202,7 @@ public class HomeActivity extends AppCompatActivity {
         listView.setVerticalScrollBarEnabled(false);
         listView.setDivider(null);
         listView.setDividerHeight(0);
+        OverScrollDecoratorHelper.setUpOverScroll(listView);
         scroll1.setHorizontalScrollBarEnabled(false);
         scroll1.setVerticalScrollBarEnabled(false);
     }
