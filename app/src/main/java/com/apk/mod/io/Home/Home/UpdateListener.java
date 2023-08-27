@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class UpdateListener {
+public class  UpdateListener {
     private static int downloadId;
     private static double number = 0;
     private static AlertDialog updateDialog;
@@ -93,7 +93,7 @@ public class UpdateListener {
                                         PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
                                                 .setDatabaseEnabled(true)
                                                 .build();
-                                        final String url = dataupdate.get((int) 0).get("link").toString().replace("blob", "raw").trim();
+                                        final String url = dataupdate.get((int) 0).get("link").toString().trim();
                                         final String path = FileExtension.defaultApkDirectory();
                                         final String filename = new File(url).getName();
                                         final String newName = dataupdate.get((int) 0).get("name").toString().concat(" ".concat(dataupdate.get((int) 0).get("version").toString().concat(".apk")));

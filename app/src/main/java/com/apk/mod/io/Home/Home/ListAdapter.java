@@ -140,7 +140,7 @@ public class ListAdapter extends BaseAdapter {
         option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String link = data.get((int) position).get("link").toString().replace("blob", "raw").trim();
+                String link = data.get((int) position).get("link").toString().trim();
                 String path = FileExtension.Offline();
                 String filename = data.get((int) position).get("name").toString().concat(" ".concat(data.get((int) position).get("version").toString().concat(".apk")));
                 PopupMenu.showPopupMenu(context, layoutInflater, v, link, path, filename, 2);

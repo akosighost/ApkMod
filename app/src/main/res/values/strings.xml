@@ -2,43 +2,80 @@
     // Sample text
     <string name="sample">Sample Text</string>
 
-    <string name="app_name">ApkMod</string>
-    <string name="please_wait">Please Wait</string>
-    <string name="todo">TODO</string>
-    <string name="Apps">https://akosighost.github.io/Apk/</string>
-    <string name="Games">https://akosighost.github.io/Apk-Games/</string>
-    <string name="IDE">https://akosighost.github.io/Android-IDE/</string>
-    <string name="update_data">https://akosighost.github.io/ApkHub-Update/</string>
-    <string name="dropdown_down">https://akosighost.github.io/DropDown-ModApk/</string>
-    <string name="cancel_download_dialog">C A N C E L</string>
-    <string name="pause_download_dialog">P A U S E</string>
-    <string name="resume_download_dialog">R E S U M E</string>
-    <string name="install_dialog">I N S T A L L</string>
-    <string name="update_dialog">U P D A T E</string>
-    <string name="downloading">Downloading</string>
-    <string name="cancel">Cancel</string>
-    <string name="download_success">Downloading Success</string>
-    <string name="checkbox">Auto Install</string>
-    <string name="no_api">Can\'t resolve api host</string>
-    <string name="unable_to_download">Unable to download</string>
-    <string name="version">Version</string>
-    <string name="search">Search…</string>
-    <string name="applications">Applications</string>
-    <string name="games">Games</string>
-    <string name="downloaded">Downloaded</string>
-    <string name="file_size">0 kB</string>
-    <string name="download_percent">0%</string>
-    <string name="available_offline">Available Offline</string>
-    <string name="offline">Offline</string>
-    <string name="end_of_list">(⁠づ⁠￣⁠ ⁠³⁠￣⁠)⁠づ End of list!</string>
-    <string name="install">Install</string>
-    <string name="share">Share</string>
-    <string name="delete">Delete</string>
-    <string name="open">Open</string>
-    <string name="grant_access">Grant Access</string>
-    <string name="permission_message"> needs access to your Storage. This permission is used to Share and store documents, media, and files on your device. (Required)</string>
-    <string name="next">CONTINUE</string>
-    <string name="quit">QUIT</string>
+    <string name="app_name">
+        ApkMod</string>
+    <string name="please_wait">
+        Please Wait</string>
+    <string name="todo">
+        TODO</string>
+    <string name="Apps">
+        https://akosighost.github.io/Apk/</string>
+    <string name="Games">
+        https://akosighost.github.io/Apk-Games/</string>
+    <string name="IDE">
+        https://akosighost.github.io/Android-IDE/</string>
+    <string name="update_data">
+        https://akosighost.github.io/ApkMod-Update/</string>
+    <string name="dropdown_down">
+        https://akosighost.github.io/DropDown-ModApk/</string>
+    <string name="cancel_download_dialog">
+        C A N C E L</string>
+    <string name="pause_download_dialog">
+        P A U S E</string>
+    <string name="resume_download_dialog">
+        R E S U M E</string>
+    <string name="install_dialog">
+        I N S T A L L</string>
+    <string name="update_dialog">
+        U P D A T E</string>
+    <string name="downloading">
+        Downloading</string>
+    <string name="cancel">
+        Cancel</string>
+    <string name="download_success">
+        Downloading Success</string>
+    <string name="checkbox">
+        Auto Install</string>
+    <string name="no_api">
+        Can\'t resolve api host</string>
+    <string name="unable_to_download">
+        Unable to download</string>
+    <string name="version">
+        Version</string>
+    <string name="search">
+        Search…</string>
+    <string name="applications">
+        Applications</string>
+    <string name="games">
+        Games</string>
+    <string name="downloaded">
+        Downloaded</string>
+    <string name="file_size">
+        0 kB</string>
+    <string name="download_percent">
+        0%</string>
+    <string name="available_offline">
+        Available Offline</string>
+    <string name="offline">
+        Offline</string>
+    <string name="end_of_list">
+        (⁠づ⁠￣⁠ ⁠³⁠￣⁠)⁠づ End of list!</string>
+    <string name="install">
+        Install</string>
+    <string name="share">
+        Share</string>
+    <string name="delete">
+        Delete</string>
+    <string name="open">
+        Open</string>
+    <string name="grant_access">
+        Grant Access</string>
+    <string name="permission_message">
+        needs access to your Storage. This permission is used to Share and store documents, media, and files on your device. (Required)</string>
+    <string name="next">
+        CONTINUE</string>
+    <string name="quit">
+        QUIT</string>
     <string name="not_available">
         Not available for now!
     </string>
