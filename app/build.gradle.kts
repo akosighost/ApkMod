@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.prdownloader)
     implementation(libs.glide)
     implementation(libs.overscroll)
+    implementation(libs.benchmark)
+    implementation(libs.profileinstaller)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
