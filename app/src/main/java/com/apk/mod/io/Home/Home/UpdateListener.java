@@ -165,7 +165,7 @@ public class  UpdateListener {
                             }
                         });
                         // Always false
-                        updateDialog.setCancelable(true);
+                        updateDialog.setCancelable(false);
                         updateDialog.show();
                     }
                 }
