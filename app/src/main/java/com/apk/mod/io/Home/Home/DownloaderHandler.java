@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.apk.mod.io.Home.Extension.FileExtension;
 import com.apk.mod.io.Home.Extension.PRDownloaderUtils;
 import com.apk.mod.io.Home.Extension.SystemData;
 import com.apk.mod.io.Home.Extension.SystemUI;
@@ -103,7 +101,7 @@ public class DownloaderHandler {
                         if (num == 1) {
                             title.setText(R.string.download_success);
                             downloadDialog.dismiss();
-                            SystemData.install(context, path.concat(filename));
+                            SystemData.installApk(context, path.concat(filename));
                         } else if (num == 2) {
                             downloadDialog.dismiss();
                         }

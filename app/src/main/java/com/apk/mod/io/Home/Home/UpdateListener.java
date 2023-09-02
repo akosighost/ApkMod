@@ -55,7 +55,7 @@ public class  UpdateListener {
                         final LinearLayout bg = cvCV.findViewById(R.id.linear1);
                         final LinearLayout download_holder = cvCV.findViewById(R.id.download_holder);
                         final LinearLayout button_holder = cvCV.findViewById(R.id.button_holder);
-                        final TextView title = (TextView) cvCV.findViewById(R.id.textview1);
+                        final TextView title = (TextView) cvCV.findViewById(R.id.number2);
                         final TextView descriptions = (TextView) cvCV.findViewById(R.id.textview2);
                         final TextView size = (TextView) cvCV.findViewById(R.id.size);
                         final TextView button1 = (TextView) cvCV.findViewById(R.id.button1);
@@ -133,9 +133,9 @@ public class  UpdateListener {
                                                         button_holder.setVisibility(View.VISIBLE);
                                                         download_holder.setVisibility(View.GONE);
                                                         size.setVisibility(View.GONE);
-                                                        SystemData.install(context, path.concat(newName));
+                                                        SystemData.installApk(context, path.concat(newName));
                                                         button1.setOnClickListener(view12 -> {
-                                                            SystemData.install(context, FileExtension.defaultApkDirectory().concat(newName));
+                                                            SystemData.installApk(context, FileExtension.defaultApkDirectory().concat(newName));
                                                         });
                                                     }
                                                     @Override
@@ -165,7 +165,7 @@ public class  UpdateListener {
                             }
                         });
                         // Always false
-                        updateDialog.setCancelable(false);
+                        updateDialog.setCancelable(true);
                         updateDialog.show();
                     }
                 }

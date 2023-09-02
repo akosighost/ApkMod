@@ -10,10 +10,14 @@
         TODO</string>
     <string name="Apps">
         https://akosighost.github.io/Apk/</string>
-    <string name="Games">https://akosighost.github.io/Apk-Games/</string>
-    <string name="IDE">https://akosighost.github.io/Android-IDE/</string>
-    <string name="update_data">https://akosighost.github.io/ApkMod-Update/</string>
-    <string name="dropdown_down">https://akosighost.github.io/DropDown-ModApk/</string>
+    <string name="Games">
+        https://akosighost.github.io/Apk-Games/</string>
+    <string name="IDE">
+        https://akosighost.github.io/Android-IDE/</string>
+    <string name="update_data">
+        https://akosighost.github.io/ApkMod-Update/</string>
+    <string name="dropdown_down">
+        https://akosighost.github.io/DropDown-ModApk/</string>
     <string name="cancel_download_dialog">
         C A N C E L</string>
     <string name="pause_download_dialog">
@@ -39,7 +43,7 @@
     <string name="version">
         Version</string>
     <string name="search">
-        Search…</string>
+        Search for apps…</string>
     <string name="applications">
         Applications</string>
     <string name="games">
@@ -58,6 +62,10 @@
         (⁠づ⁠￣⁠ ⁠³⁠￣⁠)⁠づ End of list!</string>
     <string name="install">
         Install</string>
+    <string name="uninstall">
+        Uninstall</string>
+    <string name="reinstall">
+        Re-install</string>
     <string name="share">
         Share</string>
     <string name="delete">
@@ -75,4 +83,10 @@
     <string name="not_available">
         Not available for now!
     </string>
+    <string name="make_available_offline">
+        Make available offline</string>
+    <string name="add_to_favorites">
+        Add to favorites</string>
+    <string name="extract_apk">
+        Extract Apk</string>
 </resources>

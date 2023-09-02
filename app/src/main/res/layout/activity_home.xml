@@ -20,7 +20,16 @@
             android:paddingStart="8dp"
             android:paddingEnd="10dp"
             android:paddingBottom="4dp">
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/arrow_back"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"/>
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
@@ -81,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -90,11 +100,11 @@
                     android:textColor="@color/white"
                     android:fontFamily="@font/cyber_punk"/>
                 <ImageView
-                    android:id="@+id/offline"
+                    android:id="@+id/menu"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginEnd="2dp"
-                    android:src="@drawable/sharp_offline"
+                    android:src="@drawable/sharp_menu"
                     android:scaleType="centerInside"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/todo" />
@@ -202,11 +212,16 @@
                 app:fel_size_left="0dp"
                 app:fel_size_right="0dp"
                 app:fel_size_bottom="40dp">
-                <ListView
-                    android:id="@+id/listview"
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:choiceMode="none"/>
+                    android:layout_height="wrap_content">
+                    <ListView
+                        android:id="@+id/listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:choiceMode="none"/>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
             </com.bosphere.fadingedgelayout.FadingEdgeLayout>
         </LinearLayout>
     </LinearLayout>

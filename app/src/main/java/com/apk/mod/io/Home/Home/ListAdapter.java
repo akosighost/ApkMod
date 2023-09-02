@@ -6,16 +6,15 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.apk.mod.io.Home.Extension.FileExtension;
+import com.apk.mod.io.Home.Extension.PopupMenu;
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.apk.mod.io.R;
 import com.bumptech.glide.Glide;
@@ -57,7 +56,7 @@ public class ListAdapter extends BaseAdapter {
         }
         final LinearLayout linear1 = view.findViewById(R.id.linear1);
         final LinearLayout linear2 = view.findViewById(R.id.linear2);
-        final TextView textview1 = view.findViewById(R.id.textview1);
+        final TextView number = view.findViewById(R.id.number);
         final TextView textview2 = view.findViewById(R.id.textview2);
         final TextView textview3 = view.findViewById(R.id.textview3);
         final TextView textview4 = view.findViewById(R.id.textview4);
@@ -104,7 +103,7 @@ public class ListAdapter extends BaseAdapter {
         SystemUI.setCornerRadius(context, type_holder2, ColorStateList.valueOf(Color.TRANSPARENT), 300, ColorStateList.valueOf(0xFF2196F3), 1, 0, false);
         SystemUI.setCornerRadius(context, type_holder3, ColorStateList.valueOf(Color.TRANSPARENT), 300, ColorStateList.valueOf(0xFFF44336), 1, 0, false);
         SystemUI.setCornerRadius(context, type_holder4, ColorStateList.valueOf(Color.TRANSPARENT), 300, ColorStateList.valueOf(0xFF228B22), 1, 0, false);
-        textview1.setText(String.valueOf((long) (position + 1)));
+        number.setText(String.valueOf((long) (position + 1)));
         if (data.get(position).containsKey("name") && !Objects.equals(data.get(position).get("name"), "")) {
             linear1.setVisibility(View.VISIBLE);
             textview2.setEllipsize(TextUtils.TruncateAt.MARQUEE);
@@ -143,7 +142,7 @@ public class ListAdapter extends BaseAdapter {
                 String link = data.get((int) position).get("link").toString().trim();
                 String path = FileExtension.Offline();
                 String filename = data.get((int) position).get("name").toString().concat(" ".concat(data.get((int) position).get("version").toString().concat(".apk")));
-                PopupMenu.showPopupMenu(context, layoutInflater, v, link, path, filename, 2);
+                PopupMenu.showDownloadMenu(context, layoutInflater, v, link, path, filename, 2);
             }
         });
         return view;

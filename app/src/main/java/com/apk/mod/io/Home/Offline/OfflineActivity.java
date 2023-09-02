@@ -2,32 +2,18 @@ package com.apk.mod.io.Home.Offline;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -39,13 +25,9 @@ import android.widget.Toast;
 import com.apk.mod.io.Home.Extension.FileExtension;
 import com.apk.mod.io.Home.Extension.SystemData;
 import com.apk.mod.io.Home.Extension.SystemUI;
-import com.apk.mod.io.Home.Home.DownloaderHandler;
-import com.apk.mod.io.Home.Home.HomeActivity;
-import com.apk.mod.io.Home.Home.PopupMenu;
 import com.apk.mod.io.R;
 
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -110,6 +92,7 @@ public class OfflineActivity extends AppCompatActivity {
 
         List<File> apkFiles = getFiles(directoryPath);
         ArrayAdapter<File> adapter = new ArrayAdapter<File>(this, R.layout.home_list, R.id.textview2, apkFiles) {
+            @NonNull
             @Override
             public View getView(int position, View view, @NonNull ViewGroup parent) {
                 if (view == null) {
@@ -117,7 +100,7 @@ public class OfflineActivity extends AppCompatActivity {
                 }
                 final LinearLayout linear1 = view.findViewById(R.id.linear1);
                 final LinearLayout linear2 = view.findViewById(R.id.linear2);
-                final TextView textview1 = view.findViewById(R.id.textview1);
+                final TextView number = view.findViewById(R.id.number);
                 final TextView fileName = view.findViewById(R.id.textview2);
                 final TextView filesize = view.findViewById(R.id.textview3);
                 final TextView textview4 = view.findViewById(R.id.textview4);
@@ -166,17 +149,16 @@ public class OfflineActivity extends AppCompatActivity {
                     fileName.setSelected(true);
                     fileName.setSingleLine(true);
                     long fileSize = apkFile.length();
-                    String fileSizeFormatted = formatFileSize(fileSize);
+                    String fileSizeFormatted = SystemData.formatFileSize(fileSize);
                     filesize.setText(fileSizeFormatted);
                 }
-//                assert apkFile != null;
-//                Drawable apkIcon = getApkIcon(apkFile);
-//                if (apkIcon != null) {
-//                    apkicon.setImageDrawable(apkIcon);
-//                } else {
-//                    apkicon.setImageResource(R.drawable.update); // Set a default image if no icon found
-//                }
-                textview1.setText(String.valueOf((long) (position + 1)));
+                assert apkFile != null;
+                Drawable apkIcon = SystemData.getApkIcon(getPackageManager(), apkFile);
+                if (apkIcon != null) {
+                    image.setImageDrawable(apkIcon);
+                }
+                number.setText(String.valueOf((long) (position + 1)));
+                linear2.setOnClickListener(v -> SystemData.installApk(getApplicationContext(), String.valueOf(apkFile)));
                 option.setOnClickListener(v -> {
                     Context wrapper = new ContextThemeWrapper(getApplicationContext(), R.style.popupMenuStyle);
                     android.widget.PopupMenu popupMenu = new android.widget.PopupMenu(wrapper, v);
@@ -188,7 +170,7 @@ public class OfflineActivity extends AppCompatActivity {
                             int itemId = item.getItemId();
 
                             if (itemId == R.id.install) {
-                                SystemData.install(getApplicationContext(), String.valueOf(apkFile));
+                                SystemData.installApk(getApplicationContext(), String.valueOf(apkFile));
                                 return true;
                             } else if (itemId == R.id.delete) {
                                 if (apkFile != null) {
@@ -212,10 +194,13 @@ public class OfflineActivity extends AppCompatActivity {
                 });
                 type2.setOnClickListener(view1 -> {
                     if (String.valueOf(apkFile).contains(".apk")) {
-                        SystemData.install(getApplicationContext(), String.valueOf(apkFile));
-                    } else if (String.valueOf(apkFile).contains(".txt")) {
-                        openTxtFile(apkFile);
+                        SystemData.installApk(getApplicationContext(), String.valueOf(apkFile));
                     }
+//                    if (String.valueOf(apkFile).contains(".apk")) {
+//                        SystemData.install(getApplicationContext(), String.valueOf(apkFile));
+//                    } else if (String.valueOf(apkFile).contains(".txt")) {
+//                        openTxtFile(apkFile);
+//                    }
                 });
                 type4.setOnClickListener(v -> {
                     if (apkFile != null) {
@@ -255,31 +240,6 @@ public class OfflineActivity extends AppCompatActivity {
         }
         return apkFiles;
     }
-    private Drawable getApkIcon(File apkFile) {
-        PackageManager pm = getPackageManager();
-        PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFile.getAbsolutePath(), 0);
-        if (packageInfo != null) {
-            ApplicationInfo appInfo = packageInfo.applicationInfo;
-            appInfo.sourceDir = apkFile.getAbsolutePath();
-            appInfo.publicSourceDir = apkFile.getAbsolutePath();
-            return appInfo.loadIcon(pm);
-        }
-        return null;
-    }
-    private void openTxtFile(File txtFile) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", txtFile);
-        intent.setDataAndType(uri, "text/plain");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            // Handle if there's no suitable app to open the file
-            Toast.makeText(this, "No app found to open the file.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void sortApkFilesByTime() {
         Collections.sort(fileData, new Comparator<ApkFileData>() {
             @Override
@@ -304,15 +264,5 @@ public class OfflineActivity extends AppCompatActivity {
         public long getTimestamp() {
             return timestamp;
         }
-    }
-    private String formatFileSize(long fileSize) {
-        String[] units = new String[]{"B", "KB", "MB", "GB", "TB"};
-        int unitIndex = 0;
-        double size = fileSize;
-        while (size > 1024 && unitIndex < units.length - 1) {
-            size /= 1024;
-            unitIndex++;
-        }
-        return new DecimalFormat("#,##0.#").format(size) + " " + units[unitIndex];
     }
 }

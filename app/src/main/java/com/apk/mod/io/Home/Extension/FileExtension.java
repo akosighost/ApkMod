@@ -8,6 +8,9 @@ public class FileExtension {
     public static String getExternalStorageDir() {
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
+    public static String extractDirectory() {
+        return getExternalStorageDir().concat("/Download/");
+    }
     public static String defaultApkDirectory() {
         return getExternalStorageDir().concat("/ModApk/files/Apk/");
     }

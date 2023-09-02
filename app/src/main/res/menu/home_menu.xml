@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/offline"
-        android:title="Make available offline"/>
+        android:id="@+id/menu"
+        android:title="@string/make_available_offline"/>
     <item
         android:id="@+id/favorites"
-        android:title="Add to favorites"/>
+        android:title="@string/add_to_favorites"/>
 </menu>

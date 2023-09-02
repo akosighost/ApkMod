@@ -1,6 +1,7 @@
 package com.apk.mod.io.Home.Home;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -26,18 +27,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apk.mod.io.Home.Extension.FileExtension;
+import com.apk.mod.io.Home.Extension.PopupMenu;
 import com.apk.mod.io.Home.Extension.SystemData;
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.apk.mod.io.Home.Network.RequestNetwork;
 import com.apk.mod.io.Home.Network.RequestNetworkController;
-import com.apk.mod.io.Home.Offline.OfflineActivity;
 import com.apk.mod.io.Home.Permission.PermissionActivity;
 import com.apk.mod.io.Home.Service.BackgroundService;
 import com.apk.mod.io.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,9 +53,11 @@ public class HomeActivity extends AppCompatActivity {
     private ListView listView;
     private EditText search;
     private ImageView close;
-    private ImageView offline;
+    private ImageView menu;
+    private ImageView back;
     private HorizontalScrollView scroll1;
     private Spinner spinner;
+    private SwipeRefreshLayout swipe;
     private RequestNetwork internet;
     private RequestNetwork dropdown;
     private RequestNetwork.RequestListener _internet_request_listener;
@@ -137,7 +138,10 @@ public class HomeActivity extends AppCompatActivity {
         scroll1 = findViewById(R.id.scroll1);
         spinner = findViewById(R.id.spinner);
         spinner_holder = findViewById(R.id.spinner_holder);
-        offline = findViewById(R.id.offline);
+        menu = findViewById(R.id.menu);
+        back = findViewById(R.id.back);
+        swipe = findViewById(R.id.swipe);
+        back.setVisibility(View.GONE);
         close.setOnClickListener(view -> {
             search.setText("");
             SystemData.hideKeyboard(this);
@@ -190,11 +194,11 @@ public class HomeActivity extends AppCompatActivity {
             }
         };
         offline_holder.setOnClickListener(v -> {
-            intent.setClass(getApplicationContext(), OfflineActivity.class);
-            startActivity(intent);
+            PopupMenu.showPopupMenu(this, getLayoutInflater(), v);
         });
     }
     private void initialize() {
+        swipe.setEnabled(false);
         SystemUI.setCornerRadius(this, offline_holder, ColorStateList.valueOf(0xFF2A2B2F), 300, ColorStateList.valueOf(Color.TRANSPARENT), 0, 0, false);
         SystemUI.setCornerRadius(this, spinner_holder, ColorStateList.valueOf(0xFF202226), 5, ColorStateList.valueOf(0xFF2A2B2F), 2, 0, false);
         SystemUI.setCornerRadius(this, search, ColorStateList.valueOf(0xFF202226), 0, ColorStateList.valueOf(0xFF2A2B2F), 2, 0, false);
@@ -232,7 +236,7 @@ public class HomeActivity extends AppCompatActivity {
             if (_view == null) {
                 _view = _inflater.inflate(R.layout.dropdown, null);
             }
-            final TextView textview1 = _view.findViewById(R.id.textview1);
+            final TextView textview1 = _view.findViewById(R.id.number2);
 
             textview1.setText(data.get((int)position).get("name").toString());
 
