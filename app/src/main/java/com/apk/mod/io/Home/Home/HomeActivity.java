@@ -103,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
             backPressTime = System.currentTimeMillis();
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -114,6 +115,7 @@ public class HomeActivity extends AppCompatActivity {
             setDataUpdate(getString(R.string.update_data));
         }
     }
+
     @Override
     protected void onStart() {
         super.onStart();
