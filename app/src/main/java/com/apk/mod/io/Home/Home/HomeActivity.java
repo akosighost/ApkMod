@@ -55,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView close;
     private ImageView menu;
     private ImageView back;
+
     private HorizontalScrollView scroll1;
     private Spinner spinner;
     private SwipeRefreshLayout swipe;
