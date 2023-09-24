@@ -34,15 +34,18 @@
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/smartphone"/>
+                    android:src="@drawable/smartphone"
+                    android:contentDescription="@string/todo"/>
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/dots"/>
+                    android:src="@drawable/dots"
+                    android:contentDescription="@string/todo"/>
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/lock"/>
+                    android:src="@drawable/lock"
+                    android:contentDescription="@string/todo"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

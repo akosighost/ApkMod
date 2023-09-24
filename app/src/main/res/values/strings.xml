@@ -8,6 +8,8 @@
         Please Wait</string>
     <string name="todo">
         TODO</string>
+
+<!--    link-->
     <string name="Apps">
         https://akosighost.github.io/Apk/</string>
     <string name="Games">
@@ -18,6 +20,10 @@
         https://akosighost.github.io/ApkMod-Update/</string>
     <string name="dropdown_down">
         https://akosighost.github.io/DropDown-ModApk/</string>
+
+<!--    link-->
+
+
     <string name="cancel_download_dialog">
         C A N C E L</string>
     <string name="pause_download_dialog">

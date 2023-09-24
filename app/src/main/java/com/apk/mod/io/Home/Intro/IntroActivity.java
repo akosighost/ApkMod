@@ -31,9 +31,8 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         SystemUI.customizeSystemUI(this);
-        handler = new Handler();
-        startDotAnimation();
-        loading = findViewById(R.id.loading);
+        initialize(savedInstanceState);
+        initializeLogic();
     }
     @Override
     protected void onStart() {
@@ -47,17 +46,22 @@ public class IntroActivity extends AppCompatActivity {
                     intent.setClass(getApplicationContext(), PermissionActivity.class);
                     startActivity(intent);
                 } else {
-                    if (SystemData.isConnected(this)) {
-                        intent.setClass(this, HomeActivity.class);
-                        startActivity(intent);
-                    } else {
-                        intent.setClass(this, OfflineActivity.class);
-                        startActivity(intent);
-                    }
+                    intent.setClass(this, HomeActivity.class);
+                    startActivity(intent);
                 }
             });
         }).start();
     }
+
+    private void initialize(Bundle savedInstanceState) {
+        loading = findViewById(R.id.loading);
+    }
+
+    private void initializeLogic() {
+        handler = new Handler();
+        startDotAnimation();
+    }
+
     private void startDotAnimation() {
         handler.postDelayed(() -> {
             dotCount = (dotCount + 1) % 4;
@@ -65,6 +69,7 @@ public class IntroActivity extends AppCompatActivity {
             startDotAnimation();
         }, 500);
     }
+
     private void updateText(int dotCount) {
         StringBuilder dotsBuilder = new StringBuilder();
         for (int i = 0; i < dotCount; i++) {

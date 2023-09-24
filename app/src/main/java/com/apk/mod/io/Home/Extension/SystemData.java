@@ -36,7 +36,6 @@ import java.util.HashMap;
 public class SystemData {
 
     private static Intent intent = new Intent();
-    private static final int UNINSTALL_REQUEST_CODE = 1;
 
     public static boolean isConnected(Context _context) {
         ConnectivityManager _connectivityManager = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);

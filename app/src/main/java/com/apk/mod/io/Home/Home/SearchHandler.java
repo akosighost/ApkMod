@@ -1,6 +1,5 @@
 package com.apk.mod.io.Home.Home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,10 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.apk.mod.io.Home.Extension.SystemData;
 import com.apk.mod.io.Home.Extension.SystemUI;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -51,7 +47,7 @@ public class SearchHandler {
             public void onTextChanged(CharSequence _param1, int _param2, int _param3, int _param4) {
                 final String _charSeq = _param1.toString();
                 double num = 200.0;
-                if (search.getText().toString().length() == 0) {
+                if (search.getText().toString().isEmpty()) {
                     SystemUI.Transition(search_holder, num);
                     SystemUI.Transition(close_holder, num);
                     close_holder.setVisibility(View.GONE);
@@ -89,10 +85,7 @@ public class SearchHandler {
 
             @Override
             public void beforeTextChanged(CharSequence _param1, int _param2, int _param3, int _param4) {
-
             }
         });
     }
-
-    // Add any other methods or utility functions you may need here
 }

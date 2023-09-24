@@ -78,6 +78,8 @@ public class ListAdapter extends BaseAdapter {
         final ImageView apkicon = view.findViewById(R.id.image);
         final ImageView option = view.findViewById(R.id.option);
 
+        String link = data.get((int) position).get("link").toString().replace("blob", "raw").trim();
+
         setTextViewVisibility(type_holder1, type1, "type1", position);
         setTextViewVisibility(type_holder2, type2, "type2", position);
         setTextViewVisibility(type_holder3, type3, "type3", position);
@@ -92,6 +94,7 @@ public class ListAdapter extends BaseAdapter {
         apkicon.setVisibility(View.GONE);
         textview3.setVisibility(View.GONE);
         textview4.setVisibility(View.GONE);
+
         if (position == getCount() - 1) {
             end_of_list.setVisibility(View.VISIBLE);
         } else {
