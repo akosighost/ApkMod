@@ -71,6 +71,7 @@ public class HomeActivity extends AppCompatActivity {
     private String string_search;
     private static final int BACK_PRESS_DELAY = 2000; // 2 seconds
     private long backPressTime;
+
     private ProgressDialog progressDialog;
     private Intent intent = new Intent();
 
